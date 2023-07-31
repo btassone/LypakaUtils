@@ -88,3 +88,4 @@ build/tmp/shadowJar/MANIFEST.MF
 .idea/modules/LypakaUtils.test.iml
 build/extractSrg/output.srg
 build/createMcpToSrg/output.tsrg
+.idea/gradle.xml
