@@ -2,6 +2,7 @@ package com.lypaka.lypakautils;
 
 import com.lypaka.lypakautils.ConfigurationLoaders.BasicConfigManager;
 import com.lypaka.lypakautils.ConfigurationLoaders.ConfigUtils;
+import com.lypaka.lypakautils.Listeners.TickListener;
 import com.lypaka.lypakautils.WorldStuff.WorldMap;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -39,6 +40,11 @@ public class LypakaUtils {
     public static void onServerStarted (FMLServerStartingEvent event) {
 
         WorldMap.load();
+        if (ConfigGetters.tickListenerEnabled) {
+
+            MinecraftForge.EVENT_BUS.register(new TickListener());
+
+        }
 
     }
 
