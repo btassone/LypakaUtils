@@ -5,6 +5,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class FancyText {
 

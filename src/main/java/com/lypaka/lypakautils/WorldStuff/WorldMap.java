@@ -1,5 +1,6 @@
 package com.lypaka.lypakautils.WorldStuff;
 
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.ServerWorldInfo;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
@@ -19,6 +20,12 @@ public class WorldMap {
             worldMap.put(((ServerWorldInfo) world.getLevelData()).getLevelName(), world);
 
         }
+
+    }
+
+    public static String getWorldName (ServerPlayerEntity player) {
+
+        return ((ServerWorldInfo) player.getLevel().getLevelData()).getLevelName();
 
     }
 
