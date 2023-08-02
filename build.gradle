@@ -19,7 +19,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 group = 'com.lypaka'
-version = '1.16.5-0.1.1'
+version = '1.16.5-0.1.2'
 
 java {
     archivesBaseName = 'lypakautils-base'
@@ -62,7 +62,7 @@ jar {
 
 shadowJar {
     configurations = [project.configurations.shadow]
-    archiveName = 'LypakaUtils-1.16.5-0.1.1.jar'
+    archiveName = 'LypakaUtils-1.16.5-0.1.2.jar'
 
 
     exclude "**/module-info.class"

@@ -4,6 +4,7 @@ import com.lypaka.lypakautils.API.PlayerMovementEvent;
 import com.lypaka.lypakautils.ConfigGetters;
 import com.lypaka.lypakautils.PlayerLocationData.PlayerDataHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -29,11 +30,22 @@ public class TickListener {
                 ServerPlayerEntity player = entry.getValue();
                 int currentX = (int) player.position().x;
                 int currentZ = (int) player.position().z;
+                World world = player.getLevel();
                 int steps = PlayerDataHandler.calculateStepsTaken(player.getUUID(), currentX, currentZ);
                 if (steps > 0) {
 
-                    PlayerMovementEvent playerMovementEvent = new PlayerMovementEvent(player, steps);
-                    MinecraftForge.EVENT_BUS.post(playerMovementEvent);
+                    String blockID = world.getBlockState(player.blockPosition()).getBlock().getRegistryName().toString();
+                    if (blockID.contains("water") || blockID.contains("lava")) {
+
+                        PlayerMovementEvent.Swim swimEvent = new PlayerMovementEvent.Swim(player, steps, blockID);
+                        MinecraftForge.EVENT_BUS.post(swimEvent);
+
+                    } else {
+
+                        PlayerMovementEvent.Land landEvent = new PlayerMovementEvent.Land(player, steps, blockID);
+                        MinecraftForge.EVENT_BUS.post(landEvent);
+
+                    }
 
                 }
 
