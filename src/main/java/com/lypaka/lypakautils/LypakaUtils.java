@@ -20,13 +20,12 @@ public class LypakaUtils {
 
     public static final String MOD_ID = "lypakautils";
     public static final String MOD_NAME = "LypakaUtils";
-    public static final String VERSION = "1.16.5-0.1.1";
     public static final Logger logger = LogManager.getLogger("LypakaUtils");
     public static BasicConfigManager configManager;
 
     public LypakaUtils() throws IOException {
 
-        logger.info("Loading LypakaUtils version: " + VERSION);
+        logger.info("Loading LypakaUtils");
         MinecraftForge.EVENT_BUS.register(this);
         Path dir = ConfigUtils.checkDir(Paths.get("./config/lypakautils"));
         String[] files = new String[]{"lypakautils.conf"};
