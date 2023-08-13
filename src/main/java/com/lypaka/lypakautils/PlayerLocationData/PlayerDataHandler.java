@@ -18,6 +18,8 @@ public class PlayerDataHandler {
 
         location.setCurrentX(currentX);
         location.setCurrentZ(currentZ);
+        location.setLastX(currentX);
+        location.setLastZ(currentZ);
         if (changeX == -currentX && changeZ == -currentZ) {
 
             return 0;
