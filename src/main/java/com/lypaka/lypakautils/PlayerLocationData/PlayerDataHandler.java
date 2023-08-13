@@ -8,6 +8,13 @@ public class PlayerDataHandler {
 
     public static Map<UUID, PlayerLocation> playerLocationMap = new HashMap<>();
 
+    public static void setLastKnownLandLocation (UUID uuid, int x, int y, int z) {
+
+        PlayerLocation location = playerLocationMap.get(uuid);
+        location.setLastLandLocation(new int[]{x, y, z});
+
+    }
+
     public static int calculateStepsTaken (UUID uuid, int currentX, int currentZ) {
 
         PlayerLocation location = playerLocationMap.get(uuid);

@@ -42,6 +42,7 @@ public class TickListener {
 
                     } else {
 
+                        PlayerDataHandler.setLastKnownLandLocation(player.getUUID(), player.blockPosition().getX(), player.blockPosition().getY(), player.blockPosition().getZ());
                         PlayerMovementEvent.Land landEvent = new PlayerMovementEvent.Land(player, steps, blockID);
                         MinecraftForge.EVENT_BUS.post(landEvent);
 
