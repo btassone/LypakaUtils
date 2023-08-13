@@ -6,6 +6,7 @@ public class PlayerLocation {
     private int currentZ;
     private int lastX;
     private int lastZ;
+    private int[] lastLandLocation = new int[3];
 
     public PlayerLocation (int currentX, int currentZ, int lastX, int lastZ) {
 
@@ -61,6 +62,18 @@ public class PlayerLocation {
     public void setLastZ (int z) {
 
         this.lastZ = z;
+
+    }
+
+    public int[] getLastLandLocation() {
+
+        return this.lastLandLocation;
+
+    }
+
+    public void setLastLandLocation (int[] coords) {
+
+        this.lastLandLocation = coords;
 
     }
 
