@@ -19,7 +19,7 @@ import java.util.List;
  * Uses a list of config names to create files off a base template stored in the project's assets directory
  * WARNING: This configuration loader system depends on use of the BasicConfigManager being used to generate and store a config file for the list of file names.
  * Do not call this init method without first having initialized a BasicConfigManager object!
- * Inspired by original design by landonjw of Pokemon Cobbled.
+ * Inspired by original design by landonjw of Cobblemon.
  * @author landonjw, BurstingFire, Lypaka
  *
  */
@@ -37,6 +37,25 @@ public class ComplexConfigManager {
     private final Path filesDir;
     private ArrayList<ConfigurationLoader<CommentedConfigurationNode>> configLoad;
     private CommentedConfigurationNode[] configNode;
+    private boolean suppressWarning;
+
+    public ComplexConfigManager (List<String> fileNames, String folderName, String fileName, Path configPath, Class mainClass, String modName, String modID, Logger logger, boolean suppressWarning) {
+
+        this.fileNames = fileNames;
+        this.folderName = folderName;
+        this.fileName = fileName;
+        this.configPath = configPath;
+        this.mainClass = mainClass;
+        this.modName = modName;
+        this.modID = modID;
+        this.logger = logger;
+        this.filePath = new Path[this.fileNames.size()];
+        this.filesDir = ConfigUtils.checkDir(this.configPath.resolve(this.folderName));
+        this.configLoad = new ArrayList<>(this.fileNames.size());
+        this.configNode = new CommentedConfigurationNode[this.fileNames.size()];
+        this.suppressWarning = suppressWarning;
+
+    }
 
     public ComplexConfigManager (List<String> fileNames, String folderName, String fileName, Path configPath, Class mainClass, String modName, String modID, Logger logger) {
 
@@ -52,6 +71,7 @@ public class ComplexConfigManager {
         this.filesDir = ConfigUtils.checkDir(this.configPath.resolve(this.folderName));
         this.configLoad = new ArrayList<>(this.fileNames.size());
         this.configNode = new CommentedConfigurationNode[this.fileNames.size()];
+        this.suppressWarning = true;
 
     }
 
@@ -63,7 +83,11 @@ public class ComplexConfigManager {
 
         } else {
 
-            this.logger.info("Detected the calling of a complex configuration loader with an empty list of config files!");
+            if (!this.suppressWarning) {
+
+                this.logger.info("Detected the calling of a complex configuration loader with an empty list of config files!");
+
+            }
 
         }
 
@@ -117,7 +141,11 @@ public class ComplexConfigManager {
 
         } else {
 
-            this.logger.info("Detected the calling of a complex configuration loader with an empty list of config files!");
+            if (!this.suppressWarning) {
+
+                this.logger.info("Detected the calling of a complex configuration loader with an empty list of config files!");
+
+            }
 
         }
 

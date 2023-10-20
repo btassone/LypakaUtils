@@ -18,7 +18,7 @@ import java.util.UUID;
  *
  * Used to create a player-specific configuration loader system that creates a file per player to store player-specific values
  * Builds a config file per player based on a template file in the project's assets directory and adds it to a map for access later
- * Based on original design by landonjw of Pokemon Cobbled.
+ * Based on original design by landonjw of Cobblemon.
  * @author landonjw, Lypaka
  *
  */
@@ -84,7 +84,6 @@ public class PlayerConfigManager {
             Path filePath = Paths.get(".//config//" + this.modID + "//" + this.folderName + "//" + uuid.toString() + "//" + this.fileName);
             if (!filePath.toFile().exists()) {
 
-                this.logger.info("Detected a missing account.conf file for " + uuid.toString() + "...creating a new one");
                 Files.copy(this.mainClass.getClassLoader().getResourceAsStream("assets/" + this.modID + "/" + this.fileName), ConfigUtils.playerConfig.get(this.modID).get(uuid), StandardCopyOption.REPLACE_EXISTING);
 
             }
@@ -108,7 +107,7 @@ public class PlayerConfigManager {
 
         } catch (IOException er) {
 
-            this.logger.error(this.modName + " player account configuration could not load account for " + uuid.toString());
+            this.logger.error(this.modName + " player account configuration could not load account for " + uuid);
 
         }
 

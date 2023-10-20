@@ -14,7 +14,7 @@ import java.util.ArrayList;
  *
  * Used to create your more basic configuration loader system. No player-specific files, no create-as-you-go systems.
  * Builds config files stored in the project's assets directory and loads them into a configuration loader to return commented configuration nodes
- * Based on original design by landonjw of Pokemon Cobbled.
+ * Based on original design by landonjw of Cobblemon.
  * @author landonjw, Lypaka
  *
  */
