@@ -15,13 +15,14 @@ import java.util.ArrayList;
  * Used to create essentially an "in-between" configuration loader between the BasicConfigManager and ComplexConfigManager
  * Creates configuration files from a template file like the ComplexConfigManager but is not stored as a list like the ComplexConfigManager
  * Able to be gotten individually like the BasicConfigManager
+ * Has only one config file, one index
  * Based on original design by landonjw of Cobblemon.
  * @author landonjw, Lypaka
  *
  */
 public class AdaptiveConfigManager {
 
-    private final String[] fileNames;
+    private final String fileName;
     private final String templateFile;
     private final Path configPath;
     private final Class mainClass;
@@ -32,9 +33,9 @@ public class AdaptiveConfigManager {
     private final ArrayList<ConfigurationLoader<CommentedConfigurationNode>> configLoad;
     private final CommentedConfigurationNode[] configNode;
 
-    public AdaptiveConfigManager (String[] fileNames, String templateFile, Path configPath, Class mainClass, String modName, String modID, Logger logger) {
+    public AdaptiveConfigManager (String fileName, String templateFile, Path configPath, Class mainClass, String modName, String modID, Logger logger) {
 
-        this.fileNames = fileNames;
+        this.fileName = fileName;
         this.templateFile = templateFile;
         this.configPath = configPath;
         this.mainClass = mainClass;
@@ -42,35 +43,31 @@ public class AdaptiveConfigManager {
         this.modID = modID;
         this.logger = logger;
 
-        this.config = new Path[this.fileNames.length];
-        this.configLoad = new ArrayList<ConfigurationLoader<CommentedConfigurationNode>>(this.fileNames.length);
-        this.configNode = new CommentedConfigurationNode[this.fileNames.length];
+        this.config = new Path[1];
+        this.configLoad = new ArrayList<ConfigurationLoader<CommentedConfigurationNode>>(1);
+        this.configNode = new CommentedConfigurationNode[1];
 
     }
 
     public void init() throws IOException {
 
-        for (int i = 0; i < this.fileNames.length; i++) {
+        this.config[0] = this.configPath.resolve(this.fileName);
+        Path filePathString = Paths.get(this.configPath + "//" + this.fileName);
+        if (!this.config[0].toFile().exists()) {
 
-            this.config[i] = this.configPath.resolve(this.fileNames[i]);
-            Path filePathString = Paths.get(this.configPath + "//" + this.fileNames[i]);
-            if (!this.config[i].toFile().exists()) {
+            try {
 
-                try {
+                Files.copy(this.mainClass.getClassLoader().getResourceAsStream("assets/" + this.modID + "/" + this.templateFile), filePathString, StandardCopyOption.REPLACE_EXISTING);
 
-                    Files.copy(this.mainClass.getClassLoader().getResourceAsStream("assets/" + this.modID + "/" + this.templateFile), filePathString, StandardCopyOption.REPLACE_EXISTING);
+            } catch (DirectoryNotEmptyException er) {
 
-                } catch (DirectoryNotEmptyException er) {
-
-
-                }
 
             }
 
-            HoconConfigurationLoader.builder().setPath(this.configPath).setFile(new File(this.fileNames[i])).build();
-            config[i] = this.configPath.resolve(this.fileNames[i]);
-
         }
+
+        HoconConfigurationLoader.builder().setPath(this.configPath).setFile(new File(this.fileName)).build();
+        config[0] = this.configPath.resolve(this.fileName);
 
         load();
 
@@ -82,12 +79,8 @@ public class AdaptiveConfigManager {
 
         try {
 
-            for (int i = 0; i < this.fileNames.length; i++) {
-
-                configLoad.add(i, HoconConfigurationLoader.builder().setPath(config[i]).build());
-                configNode[i] = HoconConfigurationLoader.builder().setPath(config[i]).build().load();
-
-            }
+            configLoad.add(0, HoconConfigurationLoader.builder().setPath(config[0]).build());
+            configNode[0] = HoconConfigurationLoader.builder().setPath(config[0]).build().load();
 
         } catch (IOException e) {
 
@@ -100,25 +93,21 @@ public class AdaptiveConfigManager {
 
     public void save() {
 
-        for (int i = 0; i < this.fileNames.length; i++) {
+        try {
 
-            try {
+            configLoad.get(0).save(configNode[0]);
 
-                configLoad.get(i).save(configNode[i]);
+        } catch (IOException e) {
 
-            } catch (IOException e) {
-
-                e.printStackTrace();
-
-            }
+            e.printStackTrace();
 
         }
 
     }
 
-    public CommentedConfigurationNode getConfigNode (int index, Object... node) {
+    public CommentedConfigurationNode getConfigNode (Object... node) {
 
-        return configNode[index].getNode(node);
+        return configNode[0].getNode(node);
 
     }
 

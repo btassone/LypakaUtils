@@ -1,5 +1,7 @@
 package com.lypaka.lypakautils.MiscHandlers;
 
+import com.lypaka.lypakautils.LPPlayer;
+import com.lypaka.lypakautils.LypakaUtils;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.server.permission.PermissionAPI;
 
@@ -15,6 +17,8 @@ public class PermissionHandler {
      */
     public static boolean hasPermission (ServerPlayerEntity player, String permission) {
 
+        LPPlayer lpPlayer = LypakaUtils.playerMap.get(player.getUUID());
+        if (lpPlayer.getPermissions().contains(permission)) return true;
         return PermissionAPI.hasPermission(player, permission);
 
     }

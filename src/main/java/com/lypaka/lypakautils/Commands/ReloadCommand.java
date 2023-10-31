@@ -8,6 +8,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 
 public class ReloadCommand {
 
@@ -33,8 +34,16 @@ public class ReloadCommand {
 
                                                 }
 
-                                                LypakaUtils.configManager.load();
-                                                ConfigGetters.load();
+                                                try {
+
+                                                    LypakaUtils.configManager.load();
+                                                    ConfigGetters.load();
+
+                                                } catch (ObjectMappingException e) {
+
+                                                    throw new RuntimeException(e);
+
+                                                }
                                                 c.getSource().sendSuccess(FancyText.getFormattedText("&aSuccessfully reloaded LypakaUtils configuration!"), true);
                                                 return 0;
 

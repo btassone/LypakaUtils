@@ -17,6 +17,7 @@ public class LypakaUtilsCommand {
     @SubscribeEvent
     public static void onCommandRegistration (RegisterCommandsEvent event) {
 
+        new PermissionCommand(event.getDispatcher());
         new ReloadCommand(event.getDispatcher());
 
         ConfigCommand.register(event.getDispatcher());
