@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -26,7 +27,7 @@ public class LypakaUtils {
     public static final Logger logger = LogManager.getLogger("LypakaUtils");
     public static BasicConfigManager configManager;
     public static PlayerConfigManager playerConfigManager;
-    public static Map<UUID, LPPlayer> playerMap;
+    public static Map<UUID, LPPlayer> playerMap = new HashMap<>();
 
     public LypakaUtils() throws IOException, ObjectMappingException {
 
