@@ -19,7 +19,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 group = 'com.lypaka'
-version = '1.16.5-0.3.0'
+version = '1.16.5-0.4.0'
 
 java {
     archivesBaseName = 'lypakautils-useless'
@@ -41,6 +41,7 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
     compileOnly fileTree(dir: 'C:\\Users\\ryan9\\Documents\\GitHub\\LIBRARIES', include: ['Reforged.jar'])
+    compileOnly fileTree(dir: 'C:\\Users\\ryan9\\Documents\\GitHub\\LIBRARIES', include: ['spigot-1.16.5.jar'])
     shadow group: 'ninja.leaping.configurate', name: 'configurate-hocon', version: '3.7.1'
     shadow group: 'ninja.leaping.configurate', name: 'configurate-core', version: '3.7.1'
 }
@@ -62,7 +63,7 @@ jar {
 
 shadowJar {
     configurations = [project.configurations.shadow]
-    archiveName = 'LypakaUtils-1.16.5-0.3.0.jar'
+    archiveName = 'LypakaUtils-1.16.5-0.4.0.jar'
 
 
     exclude "**/module-info.class"
