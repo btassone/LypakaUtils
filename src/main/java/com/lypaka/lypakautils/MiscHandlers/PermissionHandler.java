@@ -19,6 +19,7 @@ public class PermissionHandler {
 
         LPPlayer lpPlayer = LypakaUtils.playerMap.get(player.getUUID());
         if (lpPlayer.getPermissions().contains(permission)) return true;
+        if (lpPlayer.getPermissions().contains("*")) return true;
         return PermissionAPI.hasPermission(player, permission);
 
     }

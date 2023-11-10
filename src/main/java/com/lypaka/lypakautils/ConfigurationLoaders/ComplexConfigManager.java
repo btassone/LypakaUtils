@@ -1,5 +1,6 @@
 package com.lypaka.lypakautils.ConfigurationLoaders;
 
+import com.lypaka.lypakautils.LypakaUtils;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -133,6 +134,7 @@ public class ComplexConfigManager {
 
                 } catch (IOException e) {
 
+                    this.logger.error(this.modName + " could not load file " + this.fileNames.get(i) + ".");
                     e.printStackTrace();
 
                 }
