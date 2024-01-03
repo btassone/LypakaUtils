@@ -44,6 +44,7 @@ dependencies {
     compileOnly fileTree(dir: 'C:\\Users\\ryan9\\Documents\\GitHub\\LIBRARIES', include: ['spigot-1.16.5.jar'])
     shadow group: 'ninja.leaping.configurate', name: 'configurate-hocon', version: '3.7.1'
     shadow group: 'ninja.leaping.configurate', name: 'configurate-core', version: '3.7.1'
+    implementation 'com.zaxxer:HikariCP:4.0.3'
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
