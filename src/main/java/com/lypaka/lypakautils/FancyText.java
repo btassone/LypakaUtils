@@ -33,14 +33,4 @@ public class FancyText {
 
     }
 
-    public static StringTextComponent getFromHEX (String hexCode, String text) {
-
-        StringTextComponent textComponent = new StringTextComponent(text);
-        Style style = textComponent.getStyle();
-        style.withColor(Color.fromRgb(java.awt.Color.decode(hexCode).getRGB()));
-        textComponent.setStyle(style);
-        return textComponent;
-
-    }
-
 }
