@@ -1,9 +1,6 @@
 package com.lypaka.lypakautils.SQL;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -94,5 +91,16 @@ public class DatabaseManager {
         }
 
         return false;
+    }
+
+    public void createTable(String tableName, String tableDefinition) {
+        String createTableQuery = "CREATE TABLE IF NOT EXISTS " + tableName + " (" + tableDefinition + ")";
+        try (Connection connection = ConnectionManager.getDataSource().getConnection();
+             Statement statement = connection.createStatement()) {
+            statement.executeUpdate(createTableQuery);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle the exception (e.g., log it, throw it, etc.)
+        }
     }
 }
