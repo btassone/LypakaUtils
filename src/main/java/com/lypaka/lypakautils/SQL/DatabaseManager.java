@@ -1,10 +1,8 @@
 package com.lypaka.lypakautils.SQL;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class DatabaseManager {
@@ -12,6 +10,14 @@ public class DatabaseManager {
 
     public DatabaseManager(ConnectionManager connectionManager) {
         this.mysqlConnectionManager = connectionManager;
+    }
+
+    public void saveOrUpdateData(String tableName, Map<String, Object> data, String condition) {
+        if (dataExists(tableName, condition)) {
+            updateData(tableName, data, condition);
+        } else {
+            saveData(tableName, data);
+        }
     }
 
     public void saveData(String tableName, Map<String, Object> data) {
@@ -94,5 +100,46 @@ public class DatabaseManager {
         }
 
         return false;
+    }
+
+    public void createTable(String tableName, String tableDefinition) {
+        String createTableQuery = "CREATE TABLE IF NOT EXISTS " + tableName + " (" + tableDefinition + ")";
+        try (Connection connection = mysqlConnectionManager.getDataSource().getConnection();
+             Statement statement = connection.createStatement()) {
+            statement.executeUpdate(createTableQuery);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle the exception (e.g., log it, throw it, etc.)
+        }
+    }
+
+    public void updateData(String tableName, Map<String, Object> newData, String condition) {
+        try {
+            Connection connection = mysqlConnectionManager.getDataSource().getConnection();
+            StringBuilder sqlBuilder = new StringBuilder("UPDATE ").append(tableName).append(" SET ");
+            Iterator<Map.Entry<String, Object>> iterator = newData.entrySet().iterator();
+
+            while (iterator.hasNext()) {
+                Map.Entry<String, Object> entry = iterator.next();
+                sqlBuilder.append(entry.getKey()).append(" = ?");
+                if (iterator.hasNext()) {
+                    sqlBuilder.append(", ");
+                }
+            }
+
+            sqlBuilder.append(" WHERE ").append(condition);
+            PreparedStatement statement = connection.prepareStatement(sqlBuilder.toString());
+
+            int parameterIndex = 1;
+            for (Object value : newData.values()) {
+                statement.setObject(parameterIndex++, value);
+            }
+
+            statement.executeUpdate();
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
