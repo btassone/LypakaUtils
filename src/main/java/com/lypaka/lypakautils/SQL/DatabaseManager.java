@@ -1,9 +1,9 @@
 package com.lypaka.lypakautils.SQL;
 
+import com.lypaka.lypakautils.LypakaUtils;
+
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class DatabaseManager {
     private final ConnectionManager mysqlConnectionManager;
@@ -54,19 +54,23 @@ public class DatabaseManager {
         Map<String, Object> data = new HashMap<>();
         String selectQuery = "SELECT " + String.join(", ", fields) + " FROM " + tableName + " WHERE " + condition;
 
-        try (Connection connection = mysqlConnectionManager.getDataSource().getConnection();
-             PreparedStatement statement = connection.prepareStatement(selectQuery)) {
+        LypakaUtils.logger.info("Executing query: {}", selectQuery); // Log query
 
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    for (String field : fields) {
-                        Object value = resultSet.getObject(field);
-                        data.put(field, value);
-                    }
+        try (Connection connection = mysqlConnectionManager.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(selectQuery);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) { // Iterate through all rows
+                for (String field : fields) {
+                    Object value = resultSet.getObject(field);
+                    data.put(field, value);
                 }
+                LypakaUtils.logger.debug("Row retrieved: {}", data); // Log retrieved row (optional)
             }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            LypakaUtils.logger.error("Error executing query: {}", e.getMessage());
+            throw new RuntimeException("Failed to load data: " + e.getMessage(), e);
         }
 
         return data;
@@ -75,6 +79,8 @@ public class DatabaseManager {
     public Map<String, Object> loadData(String tableName, String[] fields) {
         Map<String, Object> data = new HashMap<>();
         String selectQuery = "SELECT " + String.join(", ", fields) + " FROM " + tableName;
+
+        LypakaUtils.logger.info("Executing query: {}", selectQuery); // Log query
 
         try (Connection connection = mysqlConnectionManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(selectQuery);
@@ -85,13 +91,44 @@ public class DatabaseManager {
                     Object value = resultSet.getObject(field);
                     data.put(field, value);
                 }
+                LypakaUtils.logger.debug("Row retrieved: {}", data); // Log retrieved row (optional)
             }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            LypakaUtils.logger.error("Error executing query: {}", e.getMessage());
+            throw new RuntimeException("Failed to load data: " + e.getMessage(), e);
         }
 
         return data;
     }
+
+    public List<Map<String, Object>> loadDataByRows(String tableName, String[] fields) {
+        List<Map<String, Object>> rowDataList = new ArrayList<>();
+        String selectQuery = "SELECT " + String.join(", ", fields) + " FROM " + tableName;
+
+        LypakaUtils.logger.info("Executing query: {}", selectQuery); // Log query
+
+        try (Connection connection = mysqlConnectionManager.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(selectQuery);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                Map<String, Object> rowData = new HashMap<>();
+                for (String field : fields) {
+                    Object value = resultSet.getObject(field);
+                    rowData.put(field, value);
+                }
+                rowDataList.add(rowData);
+            }
+
+        } catch (SQLException e) {
+            LypakaUtils.logger.error("Error executing query: {}", e.getMessage());
+            throw new RuntimeException("Failed to load data: " + e.getMessage(), e);
+        }
+
+        return rowDataList;
+    }
+
 
     public void deleteData(String tableName, String condition) {
         String deleteQuery = "DELETE FROM " + tableName + " WHERE " + condition;
@@ -135,8 +172,7 @@ public class DatabaseManager {
     }
 
     public void updateData(String tableName, Map<String, Object> newData, String condition) {
-        try {
-            Connection connection = mysqlConnectionManager.getDataSource().getConnection();
+        try (Connection connection = mysqlConnectionManager.getDataSource().getConnection()) {
             StringBuilder sqlBuilder = new StringBuilder("UPDATE ").append(tableName).append(" SET ");
             Iterator<Map.Entry<String, Object>> iterator = newData.entrySet().iterator();
 
@@ -149,18 +185,17 @@ public class DatabaseManager {
             }
 
             sqlBuilder.append(" WHERE ").append(condition);
-            PreparedStatement statement = connection.prepareStatement(sqlBuilder.toString());
+            try (PreparedStatement statement = connection.prepareStatement(sqlBuilder.toString())) {
+                int parameterIndex = 1;
+                for (Object value : newData.values()) {
+                    statement.setObject(parameterIndex++, value);
+                }
 
-            int parameterIndex = 1;
-            for (Object value : newData.values()) {
-                statement.setObject(parameterIndex++, value);
+                statement.executeUpdate();
             }
-
-            statement.executeUpdate();
-            statement.close();
-            connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LypakaUtils.logger.error("Error executing update query: {}", e.getMessage());
+            throw new RuntimeException("Failed to update data: " + e.getMessage(), e);
         }
     }
 }

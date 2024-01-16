@@ -63,6 +63,7 @@ jar {
 }
 
 shadowJar {
+    destinationDirectory = file("$buildDir/libs")
     configurations = [project.configurations.shadow]
     archiveName = 'LypakaUtils.jar'
 
