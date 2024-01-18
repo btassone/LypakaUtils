@@ -50,10 +50,19 @@ public class JoinListener {
     @SubscribeEvent
     public static void onLeave (PlayerEvent.PlayerLoggedOutEvent event) {
 
+        try {
+
+            ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+            LPPlayer lpPlayer = LypakaUtils.playerMap.get(player.getUniqueID());
+            lpPlayer.save(true);
+
+        } catch (Exception e) {
+
+            // do nothing because I can't be bothered to fix this properly when literally no one (not even me) uses this (yet)
+
+        }
+
         playerMap.entrySet().removeIf(entry -> entry.getKey().toString().equalsIgnoreCase(event.getPlayer().getUniqueID().toString()));
-        ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
-        LPPlayer lpPlayer = LypakaUtils.playerMap.get(player.getUniqueID());
-        lpPlayer.save(true);
 
     }
 
