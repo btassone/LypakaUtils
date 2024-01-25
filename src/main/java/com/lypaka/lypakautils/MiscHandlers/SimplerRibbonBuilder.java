@@ -19,7 +19,7 @@ public class SimplerRibbonBuilder {
     public SimplerRibbonBuilder (String title, String icon, String description) {
 
         this.title = FancyText.getFormattedText(title);
-        this.icon = ResourceWithFallback.from(ResourceLocationHelper.of(Pixelmon.MODID, icon));
+        this.icon = ResourceWithFallback.from(ResourceLocationHelper.of(Pixelmon.MODID, "textures/gui/ribbons/" + icon + ".png"));
         this.description = FancyText.getFormattedText(description);
 
     }
@@ -27,7 +27,7 @@ public class SimplerRibbonBuilder {
     public SimplerRibbonBuilder (String title, String icon, String description, String prefix, String suffix) {
 
         this.title = FancyText.getFormattedText(title);
-        this.icon = ResourceWithFallback.from(ResourceLocationHelper.of(Pixelmon.MODID, icon));
+        this.icon = ResourceWithFallback.from(ResourceLocationHelper.of(Pixelmon.MODID, "textures/gui/ribbons/" + icon + ".png"));
         this.description = FancyText.getFormattedText(description);
         this.prefix = FancyText.getFormattedText(prefix);
         this.suffix = FancyText.getFormattedText(suffix);
