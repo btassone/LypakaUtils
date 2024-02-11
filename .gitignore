@@ -64,6 +64,7 @@ build/tmp/shadowJar/MANIFEST.MF
 .gradle/buildOutputCleanup/buildOutputCleanup.lock
 .gradle/buildOutputCleanup/outputFiles.bin
 .gradle/file-system.probe
+.idea
 .idea/discord.xml
 .idea/gradle.xml
 .idea/misc.xml

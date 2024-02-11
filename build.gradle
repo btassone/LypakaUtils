@@ -34,14 +34,13 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
-    compileOnly fileTree(dir: 'C:\\Users\\ryan9\\Documents\\GitHub\\LIBRARIES', include: ['Reforged.jar'])
-    compileOnly fileTree(dir: 'C:\\Users\\ryan9\\Documents\\GitHub\\LIBRARIES', include: ['spigot-1.16.5.jar'])
+    compileOnly fileTree(dir: "$System.env.LIBRARIES_PATH", include: ["$System.env.PIXELMON_JAR"])
+    compileOnly fileTree(dir: "$System.env.LIBRARIES_PATH", include: ["$System.env.SPIGOT_JAR"])
     shadow group: 'ninja.leaping.configurate', name: 'configurate-hocon', version: '3.7.1'
     shadow group: 'ninja.leaping.configurate', name: 'configurate-core', version: '3.7.1'
     implementation 'com.zaxxer:HikariCP:4.0.3'
